@@ -33,15 +33,18 @@ def get_center(img):
 
 
 @log_execution_time
-def fishing(only_king=False):
+def fishing():
     start_state = match('fish5', 0.8)
     print(f'start_state {start_state}')
+    # 界面 是否存在 鱼饵
     if start_state is None:
-        # click(541, 332)
+        # 青木森林 上方鱼塘
+        # click(447, 432)
+        # 青木森林/雪山 下方鱼塘 
         click(1400, 669)
-	# click(800, 469)
         wait(1.5)
 
+    # 拖动鱼饵
     swipe(800, 960, 800, 600)
 
     wait(3)
@@ -57,7 +60,9 @@ def fishing(only_king=False):
     king = match('king', 0.8, img_a[-300:])
     print(f'king {king}')
     delay = time() - start
-    delay += 0.4
+    
+    # 设置延迟. 提前收钩减延迟, 晚收钩加延迟
+    delay += 0.15
 
     print(f'delay: {delay}')
 
@@ -67,6 +72,7 @@ def fishing(only_king=False):
         print(f'king is not None')
         if sleep_time > 0:
             wait(sleep_time)
+        # 任意位置 钓鱼
         click(701, 624)
         wait(2)
         adb('shell monkey -f /storage/emulated/0/data/tap.mks -v 1')
@@ -74,29 +80,16 @@ def fishing(only_king=False):
         # 确定
         click(956, 815)
         wait(2)
-
-    elif only_king:
-        print(f'only_king')
-        if center_x < 1250:
-            click(702, 624)
-        else:
-            wait(sleep_time)
-            click(702, 624)
-        wait(2.3)
-        # 确定
-        click(956, 815)
-        wait(2)
-
     else:
         print(f'normal')
         if sleep_time > 0:
             wait(sleep_time)
+        # 任意位置 钓鱼
         click(703, 624)
         wait(5)
         # 确定
         click(956, 815)
         wait(2)
-
 
 @log_execution_time
 def save_img(img, pic_name):
@@ -108,11 +101,11 @@ def save_img(img, pic_name):
 if __name__ == '__main__':
     print(f'speed : {speed}')
 
-    # fishing(only_king=False)
+    # fishing()
     loop = 0
     while loop < 100:
         try:
-            fishing(only_king=False)
+            fishing()
             loop = loop + 1
         except Exception as e:
             print('exception')
@@ -124,4 +117,5 @@ if __name__ == '__main__':
             loop = loop + 1
             continue
 
+    # 回家
     click(1818, 1007)
